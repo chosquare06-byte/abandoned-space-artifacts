@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abandoned but Not Forgotten | NASA Space Apps</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0b0d19;
+            color: #e2e8f0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: #161b33;
+            border: 1px solid #2d3748;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: #3182ce;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .location {
+            color: #a0aec0;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .story-box {
+            background-color: #0f1322;
+            border-left: 4px solid #3182ce;
+            padding: 20px;
+            border-radius: 6px;
+            text-align: left;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .stat-card {
+            background: #1a203c;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #2d3748;
+        }
+
+        .stat-card h4 {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #63b3ed;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #3182ce;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #2b6cb0;
+        }
+
+        button:disabled {
+            background-color: #4a5568;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <span class="tag" id="artifact-status">Operational Ended</span>
+        <h1 id="artifact-name">Loading Artifact...</h1>
+        <p class="location" id="artifact-location">Location: -</p>
+
+        <div class="story-box">
+            <p id="artifact-story">Loading story...</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h4>Launch Year</h4>
+                <p id="stat-launch">-</p>
+            </div>
+            <div class="stat-card">
+                <h4>Distance / Lifetime</h4>
+                <p id="stat-life">-</p>
+            </div>
+            <div class="stat-card">
+                <h4>Legacy / Purpose</h4>
+                <p id="stat-legacy">-</p>
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button id="prev-btn" onclick="prevArtifact()">← Previous Memory</button>
+            <button id="next-btn" onclick="nextArtifact()">Next Memory →</button>
+        </div>
+    </div>
+
+    <script>
+        // Array of story objects using clean JavaScript logic
+        const artifacts = [
+            {
+                name: "Opportunity Rover (Oppy)",
+                status: "Final Transmission: 2018",
+                location: "Endeavour Crater, Mars",
+                story: "Designed for a 90-day mission, Opportunity explored the Martian surface for over 14 years. It discovered definitive proof that liquid water once flowed on Mars before a global dust storm cut off its solar power forever.",
+                launch: "2003",
+                lifetime: "45.16 km Traveled",
+                legacy: "Proved Ancient Martian Habitability"
+            },
+            {
+                name: "Apollo 15 Lunar Roving Vehicle",
+                status: "Parked Since 1971",
+                location: "Hadley Rille, Moon",
+                story: "The first electric car driven on the Moon. Left behind at Hadley-Apennine, it served as a mobile base allowing astronauts to collect samples across vast distances. It remains perfectly preserved in the airless lunar silence.",
+                launch: "1971",
+                lifetime: "27.8 km Traveled",
+                legacy: "First Human Wheel Tracks Beyond Earth"
+            },
+            {
+                name: "Voyager 1 Golden Record",
+                status: "Interstellar Journey",
+                location: "Interstellar Space (>24 Billion km)",
+                story: "While Voyager 1's instruments are slowly powering down, it carries a gold-plated copper phonograph record containing sounds, music, and greetings in 55 languages—a time capsule of humanity traveling through the galaxy.",
+                launch: "1977",
+                lifetime: "47+ Years in Flight",
+                legacy: "Humanity's Cosmic Calling Card"
+            }
+        ];
+
+        let currentIndex = 0;
+
+        function updateUI() {
+            const current = artifacts[currentIndex];
+            document.getElementById('artifact-name').innerText = current.name;
+            document.getElementById('artifact-status').innerText = current.status;
+            document.getElementById('artifact-location').innerText = "Location: " + current.location;
+            document.getElementById('artifact-story').innerText = current.story;
+            document.getElementById('stat-launch').innerText = current.launch;
+            document.getElementById('stat-life').innerText = current.lifetime;
+            document.getElementById('stat-legacy').innerText = current.legacy;
+
+            document.getElementById('prev-btn').disabled = (currentIndex === 0);
+            document.getElementById('next-btn').disabled = (currentIndex === artifacts.length - 1);
+        }
+
+        function nextArtifact() {
+            if (currentIndex < artifacts.length - 1) {
+                currentIndex++;
+                updateUI();
+            }
+        }
+
+        function prevArtifact() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateUI();
+            }
+        }
+
+        // Initialize UI on load
+        updateUI();
+    </script>
+</body>
+</html>
